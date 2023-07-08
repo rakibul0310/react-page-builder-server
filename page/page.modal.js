@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const { Schema } = mongoose;
 
 const PageSchema = new mongoose.Schema(
   {
@@ -19,6 +20,6 @@ const PageSchema = new mongoose.Schema(
   }
 );
 
-const Page = new mongoose.model("Page", PageSchema);
+const Page = new mongoose.model("Pages", PageSchema);
 
 module.exports = Page;

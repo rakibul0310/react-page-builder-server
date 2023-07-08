@@ -1,18 +1,17 @@
-const Page = require("../../Models/PageModel");
+const { listPages } = require("../page/page.services");
 
 const home = async (req, res) => {
-  const pages = await Page.find({});
+  const pages = await listPages();
   res.render("home", { title: "Webpage Builder", pages });
 };
 
 const editor = async (req, res) => {
-  const { id } = req.params;
-  const pages = await Page.find({});
-  const selectedPage = pages.find((page) => page._id === id);
+  const pages = await listPages();
+  const selectedPage = pages.find((page) => page.id === req.params.pageId);
   res.render("editor", { title: "Webpage Builder", pages, selectedPage });
 };
 
 module.exports = {
-  home,
   editor,
+  home,
 };

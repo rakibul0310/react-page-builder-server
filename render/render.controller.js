@@ -1,9 +1,10 @@
-const Page = require("../../Models/PageModel");
+const { findPageById } = require("../page/page.services");
 
 const renderHtml = async (req, res, next) => {
   try {
-    const { id } = req.params;
-    const page = await Page.findOne({ _id: id });
+    const { params } = req;
+    const { pageId } = params;
+    const page = await findPageById(pageId);
     if (!page) {
       res.render("404");
     }

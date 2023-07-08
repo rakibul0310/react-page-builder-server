@@ -1,12 +1,13 @@
 const express = require("express");
+const mongoose = require("mongoose");
 const cors = require("cors");
-const PORT = process.env.PORT || 5000;
+const path = require("path");
+const uiRoute = require("./ui/ui.route");
+const pageRoute = require("./page/page.route");
+const assetRoute = require("./assets/assets.route");
+const projectRoute = require("./project/project.route");
+const renderHtml = require("./render/render.controller");
 const connectDB = require("./config/db");
-const ProjectRoutes = require("./routes/projectRoutes/index");
-const PageRoutes = require("./routes/pageRoutes/index");
-const UIRoutes = require("./routes/UI_Routes/index");
-const { notFound, errorHandler } = require("./middleware/errorMiddleware");
-const renderHtml = require("./controllers/renderController");
 //Initialize App
 const app = express();
 app.use(express.json());
@@ -19,22 +20,20 @@ const corsOptions = {
 corsOptions.credentials = true;
 app.use(cors(corsOptions));
 
-// connect with database
+//HTML and Static file
+app.use("/resources", express.static(path.join(__dirname, "public")));
+app.set("views", `views`);
+app.set("view engine", "hbs");
+
 connectDB();
 
-app.use("/api", ProjectRoutes);
-app.use("/api", PageRoutes);
-app.use("/:id", renderHtml);
-app.use("/api/ui", UIRoutes);
+app.use("/api/projects", projectRoute);
+app.use("/api/pages", pageRoute);
+app.use("/api/assets", assetRoute);
+app.use("/api/", uiRoute);
+app.get("/:pageId?", renderHtml);
 
-app.get("/", async (req, res) => {
-  res.send("React Page Builder Server");
-});
-
-// Error Handling middlewares
-app.use(notFound);
-app.use(errorHandler);
-
+const PORT = process.env.APP_PORT || 5000;
 app.listen(PORT, () => {
   console.log(`server is running on port ${PORT}`);
 });
