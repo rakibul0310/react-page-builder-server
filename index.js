@@ -4,7 +4,9 @@ const PORT = process.env.PORT || 5000;
 const connectDB = require("./config/db");
 const ProjectRoutes = require("./routes/projectRoutes/index");
 const PageRoutes = require("./routes/pageRoutes/index");
+const UIRoutes = require("./routes/UI_Routes/index");
 const { notFound, errorHandler } = require("./middleware/errorMiddleware");
+const renderHtml = require("./controllers/renderController");
 //Initialize App
 const app = express();
 app.use(express.json());
@@ -22,6 +24,8 @@ connectDB();
 
 app.use("/api", ProjectRoutes);
 app.use("/api", PageRoutes);
+app.use("/:id", renderHtml);
+app.use("/api/ui", UIRoutes);
 
 app.get("/", async (req, res) => {
   res.send("React Page Builder Server");
