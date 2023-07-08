@@ -1,5 +1,6 @@
 const express = require("express");
 const cors = require("cors");
+const connectDB = require("./config/db");
 
 //Initialize App
 const app = express();
@@ -12,6 +13,9 @@ const corsOptions = {
 
 corsOptions.credentials = true;
 app.use(cors(corsOptions));
+
+// connect with database
+connectDB();
 
 app.get("/", async (req, res) => {
   res.send("React Page Builder Server");
