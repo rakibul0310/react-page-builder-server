@@ -33,7 +33,7 @@ const findAllProject = async (req, res) => {
 
 const findProjectByID = async (req, res) => {
   try {
-    const { id } = req.body;
+    const { id } = req.params;
     const project = await Project.findOne({ _id: id });
     if (project) {
       res.status(200).json(project);
